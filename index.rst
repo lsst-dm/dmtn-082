@@ -51,7 +51,7 @@
 Background
 ==========
    
-The EFD (Engineering Facilities Database) is a system developed by LSST Telescope and Site that consists of an SQL database as well as the Large File Annex, which is a repository of binary data such as images from the all-sky camera. In this document, we will use EFD to refer to the database part, and the EFD's Large File Annex shall be explicitly refereed as such.
+The EFD (Engineering Facilities Database) is a system developed by LSST Telescope and Site that consists of an SQL database as well as the Large File Annex, which is a repository of binary data such as images from the all-sky camera. In this document, we will use EFD to refer to the database part, and the EFD's Large File Annex shall be explicitly referenced as such.
 
 The EFD is populated from information published to the service abstraction layer (SAL); that includes telemetry for all sensors and devices on the summit, as well as other information that Telescope and Site need to store, such as the (planned) night observer's log. 
 
