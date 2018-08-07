@@ -13,11 +13,12 @@ serial_number: '082'
 doc_id: 'DMTN-082'
 
 # Title of the document, without the series/serial designation
-doc_title: 'High level scope for the DM facing version of the engineering facilities database (EFD)'
+doc_title: 'Enabling access to telemetry data in the Science Platform'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
     - 'Simon Krughoff'
+	- 'Frossie Economou'
 
 # Current document revision date, YYYY-MM-DD
 # Only set this field if you need to manually fix the revision date;
