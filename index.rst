@@ -122,7 +122,7 @@ In the EFD design there is a SAL client that monitors the DDS bus and uses write
 Event and Command Streams
 =========================
 
-As well as the Telementry stream, the EFD captures Event Streams and Command Streams. Although these streams are of potential interest to the Science Platform users for troubleshooting purposes, they are analogous to log messages - informational rather than quantitative. Therefore we propose taht Event and Command streams are treated as Telemetry insofar that they are forwarded by Kafka to be be stored in the DM-EFD for querying, but there is no aggegation necessary. 
+As well as the Telementry stream, the EFD captures Event Streams and Command Streams. Although these streams are of potential interest to the Science Platform users for troubleshooting purposes, they are analogous to log messages - informational rather than quantitative. Therefore we propose that Event and Command streams are treated as Telemetry insofar that they are forwarded by Kafka to be be stored in the DM-EFD for querying, but there is no aggegation necessary. 
 
 
 Large File Annex
