@@ -144,7 +144,7 @@ Data of interest in the LFA originates from:
 
 * Composite Wavefrong Images
 
-* Laser
+* Laser (KSK: I'm unclear exactly what these laser data are.  Robert specifically said he didn't necessarily need the positioning laser data)
 
 * Flatfield screen monochrometer
 
@@ -192,9 +192,11 @@ Aggregation
 
 The purpose of aggregation is both to reduce volume on high-frequency telemetry data and to increase the signal-to-noise of busy telemetry. Science Platform users are generally interested in events at the same order of cadence as a camera exposure; therefore we propose that all telemetry data sampled with a frequency higher than 1Hz is (1) sampled at 1Hz and (2) aggregated to 1Hz using these generic statistics:
 
-* Mean
-
 * Max
+
+* Min
+
+* Mean
 
 * Median
 
