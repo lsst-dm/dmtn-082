@@ -96,7 +96,7 @@ Concerns about the Baseline
 
 There are a number of concerns about the baselined design.
 
-* The major one is the long latency in the availability of the data. We propose that the latency should be equal to (if not less than) the time it takes for an observation or a transient event to be available through the DM Science Platform to users. It is absurd to have a gigapixel sized image available to a Science Platform user but not the wind-speed during its observation.
+* The major one is the long latency in the availability of the data. We propose that the latency should be equal to (if not less than) the time it takes for an observation or a transient event to be available through the DM Science Platform to users. It would be unfortunate to be in the situation where a gigapixel sized image is available to a Science Platform user but not the wind-speed during its observation.
 
 * The second one is deployment cadence and interface cleanliness. In the baseline design, a desired restructuring of either the raw EFD or the DM-EFD schema involves three systems (the raw EFD, the transformed EFD and the ETL process). One of those (the raw EFD) is likely to be strictly changed controled, wheras DM data services are expected to evolve more frequently on the face of user needs. 
 
@@ -105,7 +105,9 @@ There are a number of concerns about the baselined design.
 Proposed modification
 =====================
 
-We propose that we abandon the ETL process in favour of a direct tap off the Base EFD writers and that we introduce a solution such as Kafka (https://kafka.apache.org/) to handle streaming, caching and aggregation to a DM-specific telemetry database, which we call DM-EFD. This solution can meet the proposed latency requirements and has a weaker coupling between the highly controlled EFD schema and the more rapidly evolving DM services, instead of a schema-schema transform. 
+Rather than going through an ETL process, we propose a solution that uses a direct tap off the Base EFD writers. Such a solution would handle the streaming, caching and aggregation to a DM-specific telemetry database, which we call the DM-EFD. This solution can meet the proposed latency requirements and has a weaker coupling between the highly controlled EFD schema and the more rapidly evolving DM services, instead of a schema-schema transform. 
+
+A technology in use elsewhere in the project (for alert distribution) is Kafka (https://kafka.apache.org/). Kafka can handle streaming, caching and aggregation out of the box, so may prove to be a very good fit for the system proposed here. Whether aggregation is handled before publishing to a Kafka-like system or within the system itself is an open question as benchmarks for publishing streams of the richness expectewd from the SAL have not yet been carried out.
 
 Additionally we propose that DM-EFD hold only telemetry data and events, and that data originating from human comments (eg shiftlog and data quality remarks) be segregated in separate tooling and databases, in order to optimize user-friendly interfaces (eg. Slack) and multi-platform broadcasts (eg. a message goes both in a database and echoed on Slack). 
 
