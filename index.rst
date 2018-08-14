@@ -240,8 +240,9 @@ The Science Platform is intended to support free-form troubleshooting
 for the Commissioning and Science Validation teams, so obtaining an
 exhaustive list of usecases is unlikely, especially given the time frame. As long as data is exposed in good time and in good form to the Science Platform, users will be happy.
 
-However as way of exampke, here are some of the investigations we anticipate: 
+However as way of example, here are some of the investigations we anticipate: 
 
+* The commissioning team will need to use a near real timme sub sampled version of the EFD to trigger additional commissioning activities.  For example, the commissioning scientist on duty will change the temperature set point of the M1/M3.  They will want to monitor the resulting temperature curve from the M1/M3 temperature sensors.  At a particular point (or at set points along the temperature curve), they will trigger a focus sweep or wavefront sensing image.
 * Correlate wind speed and direction -- Select the values of wind speed in m/s and direction in degrees from north in a window of time specified in UTC.
 * Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
 * Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
