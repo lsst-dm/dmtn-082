@@ -67,6 +67,20 @@ The EFD is populated from information published to the service abstraction layer
 
 The EFD contains data that is of interest to users of DM systems and services, including the commmissioning team, the science validation team and the science pipelines team. This data is most useful when co-analysed or co-monitored with data derived by the science pipelines. This informal technote discusses an alternative proposal to the baselined plan for servicing these users. 
 
+Example use cases
+=================
+
+The Science Platform is intended to support free-form troubleshooting for the Commissioning and Science Validation teams, so obtaining an exhaustive list of usecases is difficult. As long as data from the EFD is exposed in good time and in good form to the Science Platform, we expect to be able to service a large portion of both the anticipated and unanticipated use cases.
+
+Following are some example investigations we expect to be representative of core activities users of the Science
+Platform will undertake: 
+
+* Correlate wind speed and direction -- Select the values of wind speed in m/s and direction in degrees from north in a window of time specified in UTC.
+* Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
+* Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
+* Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
+* Real time trend andalysis and diagnostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams. The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be. It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
+
 Exposing EFD data to DM tooling
 ===============================
 
@@ -232,21 +246,6 @@ Other
 A notebook examining data should be deployment invariant within LSST operations; i.e. the same notebook should work in a Science Platform deployment at the LDF and one at the Base. 
 
 Units should be SI units, and the time stamps should be in UTC.
-
-Example use cases
-=================
-
-The Science Platform is intended to support free-form troubleshooting
-for the Commissioning and Science Validation teams, so obtaining an
-exhaustive list of usecases is unlikely, especially given the time frame. As long as data is exposed in good time and in good form to the Science Platform, users will be happy.
-
-However as way of exampke, here are some of the investigations we anticipate: 
-
-* Correlate wind speed and direction -- Select the values of wind speed in m/s and direction in degrees from north in a window of time specified in UTC.
-* Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
-* Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
-* Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
-
 
 .. .. rubric:: References
 
