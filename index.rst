@@ -79,7 +79,11 @@ Platform will undertake:
 * Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
 * Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
 * Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
-* Real time trend andalysis and diagnostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams. The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be. It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
+* Real time trend andalysis and diagnostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
+The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be.
+It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
+A concrete example of this usage is a scenario where the commissioning scientist wants to modify the set point of the focalplane temperature controller.
+They then want to trigger wavefront observations at intervals as the system returns to equilibrium to monitor how the system responds to such stimuli.
 
 Exposing EFD data to DM tooling
 ===============================
