@@ -70,7 +70,7 @@ The EFD contains data that is of interest to users of DM systems and services, i
 Example use cases
 =================
 
-The Science Platform is intended to support free-form troubleshooting for the Commissioning and Science Validation teams, so obtaining an exhaustive list of usecases is difficult. As long as data from the EFD is exposed in good time and in good form to the Science Platform, we expect to be able to service a large portion of both the anticipated and unanticipated use cases.
+The Science Platform is intended to support free-form troubleshooting for the Commissioning and Science Validation teams, so detailing an exhaustive list of usecases is difficult. As long as data from the EFD is exposed in good time and in good form to the Science Platform, we expect to be able to service a large portion of both the anticipated and unanticipated use cases.
 
 Following are some example investigations we expect to be representative of core activities users of the Science
 Platform will undertake: 
@@ -127,7 +127,7 @@ Proposed modification
 
 Rather than going through an ETL process, we propose a solution that uses a direct tap off the Base EFD writers. Such a solution would handle the streaming, caching and aggregation to a DM-specific telemetry database, which we call the DM-EFD. This solution can meet the proposed latency requirements and has a weaker coupling between the highly controlled EFD schema and the more rapidly evolving DM services, instead of a schema-schema transform. 
 
-A technology in use elsewhere in the project (for alert distribution) is Kafka (https://kafka.apache.org/). Kafka can handle streaming, caching and aggregation out of the box, so may prove to be a very good fit for the system proposed here. Whether aggregation is handled before publishing to a Kafka-like system or within the system itself is an open question as benchmarks for publishing streams of the richness expectewd from the SAL have not yet been carried out.
+A technology in use elsewhere in the project (for alert distribution) is Kafka (https://kafka.apache.org/). Kafka can handle streaming, caching and aggregation out of the box, so may prove to be a very good fit for the system proposed here. Whether aggregation is handled before publishing to a Kafka-like system or within the system itself should be demonstrated when benchmarks for publishing streams of the richness expected from the SAL are available. 
 
 Additionally we propose that DM-EFD hold only telemetry data and events, and that data originating from human comments (eg shiftlog and data quality remarks) be segregated in separate tooling and databases, in order to optimize user-friendly interfaces (eg. Slack) and multi-platform broadcasts (eg. a message goes both in a database and echoed on Slack). 
 
@@ -243,6 +243,13 @@ Redundancy
 ----------
 
 DM-EFD should be sized to hold the aggregated event streams from commissioning to the end if operations.  It should be redundant, or backed up so that the risk of data loss is acceptably low, even if the EFD system is backed some other way into cold storage. 
+
+Summit-to-base network interruptions
+------------------------------------
+
+Any system needs to be robust against summit-base network outages, and cache, automatically reconnect and recover any data accumulated during the interruption. 
+
+Note that in the baseline design, this recovery rests in the ETL process being able to detect backlogged data inserted in the base raw EFD. In the proposed modification, this data will be transparently picked up by the Kafka publisher when the base raw EFD writers catch up with the backlog. It is also possible that in the event where sufficient resources are available to deploy the Kafka publisher at the summit, this problem would be immediately mitigated, without depending on whatever scheme is used to keep the base EFD in sync with the summit EFD. 
 
 Other
 -----
