@@ -109,8 +109,7 @@ The raw EFD is optimised for the high frequency writes that are expected from a 
 
 The baseline design involves an ETL (extract-transform-load) process from the "raw" EFD to the retransformed EFD. In the original design the periodicity of EFD data being available in the retransformed EFD was set to once every 24 hours. Shorter periods such as one hour have been discussed, with the possibility going down to 5 minutes having been discussed, but not demonstrated as feasible with this architecture. 
 
-In this design, any calibration or aggregation is done during the ETL process. 
-
+In this design, any calibration or aggregation is done during the ETL process. One of the primary purposes of aggregation is to allow the aggregation and association of values with the exposure table. 
 
 Concerns about the Baseline
 ===========================
