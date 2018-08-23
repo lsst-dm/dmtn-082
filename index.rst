@@ -79,7 +79,8 @@ Platform will undertake:
 * Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
 * Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
 * Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
-* Real time trend andalysis and diagnostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
+* Prompt trend andalysis -- Observatory staff wish to be alerted when a telemetry quantity that has been historically stable is starting to show excursions
+* Near-real time feedback and diagostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
 The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be.
 It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
 A concrete example of this usage is a scenario where the commissioning scientist wants to modify the set point of the focalplane temperature controller.
@@ -95,6 +96,8 @@ There are a number of motivators for exposing EFD data to DM tools and services:
 * DM is building powerful tooling to support both ad-hoc investigation (chiefly the Notebook Aspect of the Science Platform); these significantly exceed any planned capabilities from Telescope and Site for analysing EFD data; therefore prompt exposure of this data to the Science Platform will be of direct benefit to EFD data consumers in other subsystems. These explorations include freeform investigations into EFD data ("plot everything against everything").
 
 * Additionally, DM (SQuaRE) has built a framework for metric curation and alert monitoring (lsst.verify, SQuaSH and a planned trend excursion alert harness) that could be well suited for integrating certain key facility metrics.
+
+* DM (SQuaRE) will be investigating platforms for metrics monitoring and trend analysis, some of which may be good candidates for telemetry-derived data
 
 * Aggregations of telemetry data are also of interest to night-reporting and characterisation-reporting tooling.
 
@@ -133,10 +136,12 @@ Both of these would require LCRs and possibly the reallocation of resources.
 
 A straw-man architecture for these modifications is shown in the diagram below
 
-.. figure:: /_static/dm-efd-take2.png
+.. figure:: /_static/dm-efd-take3.png
         :name: fig-arch
 
 In the EFD design there is a SAL client that monitors the DDS bus and uses writers to insert telemetry values into the EFD, write them in logs etc. It is a lightweight change to add a writer to publish these values to Kafka. Kafka can both deal with caching and connection management, as well as aggregation. 
+
+Another advantage of switching to a streaming model is that this matches well off-the-shelf observability and trend analysis products (eg. https://www.honeycomb.io/).
 
 
 Event and Command Streams
@@ -148,11 +153,7 @@ As well as the Telementry stream, the EFD captures Event Streams and Command Str
 Large File Annex
 ================
 
-The Large File Annex is a store of non-scalar auxillary data, from
-images, to FITS cubes and PDF documents. When data from an auxilary
-source such as the all-sky camera has been stored in the Large File
-Annex, its avaibility is broadcast on the Large File Annex
-Announcement Even Stream.
+The Large File Annex is a store of non-scalar auxillary data, from images, to FITS cubes and PDF documents. When data from an auxilary source such as the all-sky camera has been stored in the Large File Annex, its avaibility is broadcast on the Large File Annex Announcement Even Stream.
 
 By volume, most of the information in the LFA is of no interest to Science Platform users, nor is it in a form that is tractable for python-level exploitation. For example, the LFA contains reports in the form of Excel spreadsheets; a Science Platform user is likely to create reports from the data directly, rather than interact with the derived documents.
 
