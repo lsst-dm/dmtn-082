@@ -67,6 +67,25 @@ The EFD is populated from information published to the service abstraction layer
 
 The EFD contains data that is of interest to users of DM systems and services, including the commmissioning team, the science validation team and the science pipelines team. This data is most useful when co-analysed or co-monitored with data derived by the science pipelines. This informal technote discusses an alternative proposal to the baselined plan for servicing these users. 
 
+Example use cases
+=================
+
+The Science Platform is intended to support free-form troubleshooting for the Commissioning and Science Validation teams, so detailing an exhaustive list of usecases is difficult. As long as data from the EFD is exposed in good time and in good form to the Science Platform, we expect to be able to service a large portion of both the anticipated and unanticipated use cases.
+
+Following are some example investigations we expect to be representative of core activities users of the Science
+Platform will undertake: 
+
+* Correlate wind speed and direction -- Select the values of wind speed in m/s and direction in degrees from north in a window of time specified in UTC.
+* Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
+* Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
+* Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
+* Prompt trend andalysis -- Observatory staff wish to be alerted when a telemetry quantity that has been historically stable is starting to show excursions
+* Near-real time feedback and diagostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
+The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be.
+It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
+A concrete example of this usage is a scenario where the commissioning scientist wants to modify the set point of the focalplane temperature controller.
+They then want to trigger wavefront observations at intervals as the system returns to equilibrium to monitor how the system responds to such stimuli.
+
 Exposing EFD data to DM tooling
 ===============================
 
@@ -78,9 +97,13 @@ There are a number of motivators for exposing EFD data to DM tools and services:
 
 * Additionally, DM (SQuaRE) has built a framework for metric curation and alert monitoring (lsst.verify, SQuaSH and a planned trend excursion alert harness) that could be well suited for integrating certain key facility metrics.
 
+* DM (SQuaRE) will be investigating platforms for metrics monitoring and trend analysis, some of which may be good candidates for telemetry-derived data
+
 * Aggregations of telemetry data are also of interest to night-reporting and characterisation-reporting tooling.
 
+Engineering staff and the commissioning team are excited and motivated to use DM tooling, however when they discuss their usecases low latencies in exposing facility information to the tooling is a strong presumption.  
 
+ 
 Baselined Design
 ================
 
@@ -88,8 +111,7 @@ The raw EFD is optimised for the high frequency writes that are expected from a 
 
 The baseline design involves an ETL (extract-transform-load) process from the "raw" EFD to the retransformed EFD. In the original design the periodicity of EFD data being available in the retransformed EFD was set to once every 24 hours. Shorter periods such as one hour have been discussed, with the possibility going down to 5 minutes having been discussed, but not demonstrated as feasible with this architecture. 
 
-In this design, any calibration or aggregation is done during the ETL process. 
-
+In this design, any calibration or aggregation is done during the ETL process. One of the primary purposes of aggregation is to allow the aggregation and association of values with the exposure table. For example in the event that three months into the first year a quantity that is not in the header is identified as required by the Science Pipelines, it would be added in the header configuration and be availale for alert production; however the DRP that runs on that whole first year will need to pull that information for the first 3 months from the DM/ETL EFD. The Calibration Database is also populated from data in the DM/ETL EFD. 
 
 Concerns about the Baseline
 ===========================
@@ -107,7 +129,7 @@ Proposed modification
 
 Rather than going through an ETL process, we propose a solution that uses a direct tap off the Base EFD writers. Such a solution would handle the streaming, caching and aggregation to a DM-specific telemetry database, which we call the DM-EFD. This solution can meet the proposed latency requirements and has a weaker coupling between the highly controlled EFD schema and the more rapidly evolving DM services, instead of a schema-schema transform. 
 
-A technology in use elsewhere in the project (for alert distribution) is Kafka (https://kafka.apache.org/). Kafka can handle streaming, caching and aggregation out of the box, so may prove to be a very good fit for the system proposed here. Whether aggregation is handled before publishing to a Kafka-like system or within the system itself is an open question as benchmarks for publishing streams of the richness expectewd from the SAL have not yet been carried out.
+A technology in use elsewhere in the project (for alert distribution) is Kafka (https://kafka.apache.org/). Kafka can handle streaming, caching and aggregation out of the box, so may prove to be a very good fit for the system proposed here. Whether aggregation is handled before publishing to a Kafka-like system or within the system itself should be demonstrated when benchmarks for publishing streams of the richness expected from the SAL are available. 
 
 Additionally we propose that DM-EFD hold only telemetry data and events, and that data originating from human comments (eg shiftlog and data quality remarks) be segregated in separate tooling and databases, in order to optimize user-friendly interfaces (eg. Slack) and multi-platform broadcasts (eg. a message goes both in a database and echoed on Slack). 
 
@@ -115,10 +137,12 @@ Both of these would require LCRs and possibly the reallocation of resources.
 
 A straw-man architecture for these modifications is shown in the diagram below
 
-.. figure:: /_static/dm-efd-take2.png
+.. figure:: /_static/dm-efd-concept.png
         :name: fig-arch
 
 In the EFD design there is a SAL client that monitors the DDS bus and uses writers to insert telemetry values into the EFD, write them in logs etc. It is a lightweight change to add a writer to publish these values to Kafka. Kafka can both deal with caching and connection management, as well as aggregation. 
+
+Another advantage of switching to a streaming model is that this matches well off-the-shelf observability and trend analysis products (eg. https://www.honeycomb.io/).
 
 
 Event and Command Streams
@@ -130,11 +154,7 @@ As well as the Telementry stream, the EFD captures Event Streams and Command Str
 Large File Annex
 ================
 
-The Large File Annex is a store of non-scalar auxillary data, from
-images, to FITS cubes and PDF documents. When data from an auxilary
-source such as the all-sky camera has been stored in the Large File
-Annex, its avaibility is broadcast on the Large File Annex
-Announcement Even Stream.
+The Large File Annex is a store of non-scalar auxillary data, from images, to FITS cubes and PDF documents. When data from an auxilary source such as the all-sky camera has been stored in the Large File Annex, its avaibility is broadcast on the Large File Annex Announcement Even Stream.
 
 By volume, most of the information in the LFA is of no interest to Science Platform users, nor is it in a form that is tractable for python-level exploitation. For example, the LFA contains reports in the form of Excel spreadsheets; a Science Platform user is likely to create reports from the data directly, rather than interact with the derived documents.
 
@@ -226,27 +246,19 @@ Redundancy
 
 DM-EFD should be sized to hold the aggregated event streams from commissioning to the end if operations.  It should be redundant, or backed up so that the risk of data loss is acceptably low, even if the EFD system is backed some other way into cold storage. 
 
+Summit-to-base network interruptions
+------------------------------------
+
+Any system needs to be robust against summit-base network outages, and cache, automatically reconnect and recover any data accumulated during the interruption. 
+
+Note that in the baseline design, this recovery rests in the ETL process being able to detect backlogged data inserted in the base raw EFD. In the proposed modification, this data will be transparently picked up by the Kafka publisher when the base raw EFD writers catch up with the backlog. It is also possible that in the event where sufficient resources are available to deploy the Kafka publisher at the summit, this problem would be immediately mitigated, without depending on whatever scheme is used to keep the base EFD in sync with the summit EFD. 
+
 Other
 -----
 
 A notebook examining data should be deployment invariant within LSST operations; i.e. the same notebook should work in a Science Platform deployment at the LDF and one at the Base. 
 
-Units should be SI units, and the time stamps should be in UTC.
-
-Example use cases
-=================
-
-The Science Platform is intended to support free-form troubleshooting
-for the Commissioning and Science Validation teams, so obtaining an
-exhaustive list of usecases is unlikely, especially given the time frame. As long as data is exposed in good time and in good form to the Science Platform, users will be happy.
-
-However as way of exampke, here are some of the investigations we anticipate: 
-
-* Correlate wind speed and direction -- Select the values of wind speed in m/s and direction in degrees from north in a window of time specified in UTC.
-* Look for extreme temperature gradients for images with bad seeing -- Select start and stop times for exposures with seeing > 1.2 arcsec.  Select the dome temperature at the start and stop times for each of the exposures.  Plot delta T vs seeing.
-* Generic correlation -- Select all relevent values from the EFD for all images taken in a time window.  Associate a typical value with each exposure.  Plot everything against everything.
-* Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
-
+Units should be SI units, and the time stamps should be in TAI.
 
 .. .. rubric:: References
 
