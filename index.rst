@@ -256,7 +256,7 @@ Other
 
 A notebook examining data should be deployment invariant within LSST operations; i.e. the same notebook should work in a Science Platform deployment at the LDF and one at the Base. 
 
-Units should be SI units, and the time stamps should be in UTC.
+Units should be SI units, and the time stamps should be in TAI.
 
 .. .. rubric:: References
 
