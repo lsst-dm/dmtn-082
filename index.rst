@@ -101,7 +101,9 @@ There are a number of motivators for exposing EFD data to DM tools and services:
 
 * Aggregations of telemetry data are also of interest to night-reporting and characterisation-reporting tooling.
 
+Engineering staff and the commissioning team are excited and motivated to use DM tooling, however when they discuss their usecases low latencies in exposing facility information to the tooling is a strong presumption.  
 
+ 
 Baselined Design
 ================
 
