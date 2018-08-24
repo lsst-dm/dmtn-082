@@ -135,7 +135,7 @@ Both of these would require LCRs and possibly the reallocation of resources.
 
 A straw-man architecture for these modifications is shown in the diagram below
 
-.. figure:: /_static/dm-efd-take3.png
+.. figure:: /_static/dm-efd-concept.png
         :name: fig-arch
 
 In the EFD design there is a SAL client that monitors the DDS bus and uses writers to insert telemetry values into the EFD, write them in logs etc. It is a lightweight change to add a writer to publish these values to Kafka. Kafka can both deal with caching and connection management, as well as aggregation. 
