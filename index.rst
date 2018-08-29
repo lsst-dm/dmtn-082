@@ -172,6 +172,10 @@ Data of interest in the LFA originates from:
 
 * Sky-spectrum monitor (if/when built)
 
+* The DIM
+
+* Dome seeing monitor
+
 Like the data from the Auxillary Telescope, users want to interact with the LFA data through the butler, an appropriate dataset type having been define. Moreover users require these data with very low latencies as it is likely that they need it in order to make on-the-fly adjustments to systems during commissioning.
 
 We therefore propose that the LFA Announcement Stream is monitored by the DM-CS and when data from these enumerated sources is made available, that it be injected into the data backbone, from whence it will be treated like data (and not telemetry) by upstream services.
