@@ -82,9 +82,12 @@ Platform will undertake:
 * Prompt trend andalysis -- Observatory staff wish to be alerted when a telemetry quantity that has been historically stable is starting to show excursions
 * Near-real time feedback and diagostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
 The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be.
-It also provides better accessibility since the summit health check dashboard is not expected to be accessible from outside the dome.
 A concrete example of this usage is a scenario where the commissioning scientist wants to modify the set point of the focalplane temperature controller.
 They then want to trigger wavefront observations at intervals as the system returns to equilibrium to monitor how the system responds to such stimuli.
+
+.. note::
+
+  We did engage in conversation with members of the T&S team to confirm that there are not requirements on the health dasboards that would satisfy use cases stated here, specifically alerts and trend analysis will not be supported by that system.
 
 Exposing EFD data to DM tooling
 ===============================
