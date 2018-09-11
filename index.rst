@@ -78,6 +78,7 @@ Platform will undertake:
 * Search for data with possible excursions -- We see evidence that when the dome opening is pointing east we have image quality issues.  In order to get a large sample to do the debugging on find all entries in the DM EFD where the dome opening is set to be pointing east.  Next select all exposures where the start/stop times overlap those entries.
 * Prompt trend andalysis -- Observatory staff wish to be alerted when a telemetry quantity that has been historically stable is starting to show excursions
 * Near-real time feedback and diagostics -- The commissioning scientist wants to monitor several different telemetry quantities on a custom dashboard intended to reveal, in real time, correlations and trends of various related telemetry streams.
+
 The health dashboard may have some of these quantities, but it will not be configurable the same way a custom dashboard could be.
 A concrete example of this usage is a scenario where the commissioning scientist wants to modify the set point of the focalplane temperature controller.
 They then want to trigger wavefront observations at intervals as the system returns to equilibrium to monitor how the system responds to such stimuli.
@@ -178,13 +179,12 @@ Data of interest in the LFA originates from:
 
 Like the data from the Auxillary Telescope, users want to interact with the LFA data through the butler, an appropriate dataset type having been define. Moreover users require these data with very low latencies as it is likely that they need it in order to make on-the-fly adjustments to systems during commissioning.
 
-We therefore propose that the LFA Announcement Stream is monitored by the DM-CS and when data from these enumerated sources is made available, that it be injected into the data backbone, from whence it will be treated like data (and not telemetry) by upstream services.
-
+We therefore propose that the LFA Announcement Stream is monitored by a service running at the base.  The Archiver is a likely candidate, but could also be a new service specifically for this purpose (See  `LDM-152 <https://ls.st/LDM-152>`__ :cite:`LDM-152` to see how the Archiver fits into the overall middleware architecture.) and when data from these enumerated sources is made available, that it be injected into the data backbone, from whence it will be treated like data (and not telemetry) by upstream services.
 
 Design-neutral Requirements
 ===========================
 
-Rehardless of whether the ETL or new proposed architecture is adopted, the eventual architecture needs to show how it can meet satisfy the following requirments and use cases.  
+Regardless of whether the ETL or new proposed architecture is adopted, the eventual architecture needs to show how it can meet satisfy the following requirments and use cases.  
 
 
 Availability of the DM-EFD capabilities
@@ -264,10 +264,9 @@ A notebook examining data should be deployment invariant within LSST operations;
 
 Units should be SI units, and the time stamps should be in TAI.
 
-.. .. rubric:: References
+References
+----------
 
-.. Make in-text citations with: :cite:`bibkey`.
+.. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
+   :style: lsst_aa
 
-.. .. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
-..    :encoding: latex+latin
-..    :style: lsst_aa
